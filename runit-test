@@ -1,0 +1,21 @@
+#/bin/bash
+# Testfile
+# Compile: uname -a
+# Run: echo "Hallo Welt"
+# Run: und das
+#
+echo "Bashing...."
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Compile: ; echo not this

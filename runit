@@ -1,0 +1,61 @@
+#!/bin/bash
+if [ -z $1 -o ! -e $1 ]; then
+  echo "Usage: runit <file>"
+  exit 1
+fi 
+datei=$1
+erweiterung=${datei##*.}
+program=${datei%.*}
+zeile1=`head -n 1 $datei`
+shebang=${zeile1:0:2}
+
+if [ "$shebang" == "#!" ] 
+then
+  echo "> Making executable..."
+  chmod +x $datei
+  echo "> Starting: ./$datei"
+  ./$datei
+  exit 0
+fi
+
+run=`head -n 10 $datei | sed -n -e 's/^.*Run: \(.*\)$/\1/p'`
+compile=`head -n 10 $datei | sed -n -e 's/^.*Compile: \(.*\)$/\1/p'`
+
+if [ -n "$compile" ]
+then
+  echo "> Found Compile: $compile"
+  $compile
+else 
+  case "$erweiterung" in
+    adb)
+      compile="gnatmake -gnaty3acefhiklmnrpt $datei"
+      ;;
+    cpp)
+      compile="g++ $datei -o $program"
+      ;;
+    c)
+      compile="gcc $datei -o $program"
+      ;;
+    java)
+      compile="javac $datei"
+      [ -z "$run" ] && run="java $program"
+      ;;
+  esac
+  if [ -n "$compile" ]
+  then
+    echo "> Guessing Compile: $compile"
+    $compile
+    if [ $? != 0 ]; then
+      exit 1;
+    fi
+  fi
+fi
+
+if [ -n "$run" ]
+then
+  echo "> Found Run: $run"
+  $run
+else
+  echo "> Guessing Run: ./$program"
+  ./$program
+fi
