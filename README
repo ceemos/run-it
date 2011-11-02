@@ -1,0 +1,6 @@
+This simple tool is designed to be run by a Keyboard shortcut from an Editor.
+For example, for Kate use the externel tools plugin with the command:
+konsole -e sh -c 'cd %directory && pwd && runit %filename ; echo Press any key to continue. && read -n 1'
+
+All functionality is in the runit bash script, the other tools are just for testing 
+and demonstration purposes.
