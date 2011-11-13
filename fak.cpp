@@ -1,5 +1,5 @@
 /*
- * Compile: g++ -lcln fak.cpp -o fak
+ * Compile: g++ -g -lcln fak.cpp -o fak
  */
 #include <cln/integer.h>//for mathematical operations on arbitrarily long integers
 #include <cln/integer_io.h>//for input/output of long integers

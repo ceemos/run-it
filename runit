@@ -34,7 +34,7 @@ else
       compile="g++ $datei -o $program"
       ;;
     c)
-      compile="gcc $datei -o $program"
+      compile="gcc -std=gnu99 $datei -o $program"
       ;;
     java)
       compile="javac $datei"

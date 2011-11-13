@@ -1,5 +1,5 @@
 /*
- * Run: java Hallo MArcel
+ * Run: java Hallo Marcel
  */ 
 public class Hallo {
   public static void main(String[] args) {
