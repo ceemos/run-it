@@ -9,16 +9,23 @@ program=${datei%.*}
 zeile1=`head -n 1 $datei`
 shebang=${zeile1:0:2}
 
+run=`head -n 10 $datei | sed -n -e 's/^.*Run: \(.*\)$/\1/p'`
+
 if [ "$shebang" == "#!" ] 
 then
   echo "> Making executable..."
   chmod +x $datei
-  echo "> Starting: ./$datei"
-  ./$datei
+  if [ -n "$run" ]
+  then
+    echo "> Found Run: $run"
+    $run
+  else 
+    echo "> Starting: ./$datei"
+    ./$datei
+  fi
   exit 0
 fi
 
-run=`head -n 10 $datei | sed -n -e 's/^.*Run: \(.*\)$/\1/p'`
 compile=`head -n 10 $datei | sed -n -e 's/^.*Compile: \(.*\)$/\1/p'`
 
 if [ -n "$compile" ]
@@ -40,6 +47,14 @@ else
       compile="javac $datei"
       [ -z "$run" ] && run="java $program"
       ;;
+    txt)
+      compile="apt2pdf"
+      [ -z "$run" ] && run="echo 'out.pdf should be in the directory.'"
+      ;;
+    apt)
+      compile="apt2pdf $datei"
+      [ -z "$run" ] && run="echo 'out.pdf should be in the directory.'"
+      ;;
   esac
   if [ -n "$compile" ]
   then
@@ -54,8 +69,8 @@ fi
 if [ -n "$run" ]
 then
   echo "> Found Run: $run"
-  $run
+  time $run
 else
   echo "> Guessing Run: ./$program"
-  ./$program
+  time ./$program
 fi
